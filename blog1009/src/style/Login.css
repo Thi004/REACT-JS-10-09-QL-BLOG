@@ -1,0 +1,29 @@
+body {
+    background-color: #f8f9fa;
+}
+.form-container {
+    margin-top: 50px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.nav-tabs .nav-link.active {
+    background-color: #007bff;
+    color: white;
+}
+.nav-tabs .nav-link {
+    color: #007bff;
+}
+.form-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.form-header h2 {
+    margin-bottom: 0;
+    font-weight: bold;
+}
+#link{
+    color: white;
+    text-decoration: none;
+}
