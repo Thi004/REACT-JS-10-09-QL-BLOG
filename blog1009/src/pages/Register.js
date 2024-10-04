@@ -1,11 +1,14 @@
 import '../style/Login.css'
 import {Link, useNavigate} from "react-router-dom";
-import {Field, Formik} from "formik";
+import {Field, Form, Formik} from "formik";
 import axios from "axios";
+import Header from "../component/Header";
+import AvatarUpload from "../component/AvatarUpload";
 function Register () {
     let navigate = useNavigate();
     return (
         <>
+            <Header/>
             <div className="container">
                 <Formik
                     initialValues={
@@ -30,7 +33,7 @@ function Register () {
                                     <div className="form-header mt-4">
                                         <h2>Register</h2>
                                     </div>
-                                    <form>
+                                    <Form>
                                         <div className="mb-3">
                                             <label className="form-label">User Name</label>
                                             <Field className="form-control" name={'username'}/>
@@ -43,8 +46,9 @@ function Register () {
                                             <label className="form-label">Dob</label>
                                             <Field className="form-control" name={'dob'}/>
                                         </div>
-                                        <button type="submit" className="btn btn-primary w-100">Register</button>
-                                    </form>
+                                        <AvatarUpload/>
+                                            <button type="submit" className="btn btn-primary w-100">Register</button>
+                                    </Form>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +56,7 @@ function Register () {
                 </Formik>
             </div>
         </>
-    )
+)
 }
 
 export default Register

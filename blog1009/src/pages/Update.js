@@ -1,55 +1,54 @@
 import Header from "../component/Header";
 import {Field, Form, Formik} from "formik";
-import {Button, Form as BootstrapForm, FormSelect} from 'react-bootstrap';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import {useContext, useState} from "react";
+import {Button, Form as BootstrapForm} from "react-bootstrap";
+import ReactQuill from "react-quill";
+import {useContext, useEffect, useState} from "react";
 import {MyContext} from "../component/MyContext";
 import axios from "axios";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 
-function Posts() {
+function Update(){
     let {currentUser} = useContext(MyContext);
     const [editorValue, setEditorValue] = useState('');
+    let [listPost,setListPost] = useState({});
+    const params = useParams();
+    const idUpdate = params.id;
+    const navigate = useNavigate();
     const [status, setStatus] = useState('');
     const [type, setType] = useState('');
-    const navigate = useNavigate();
-    const handleSubmit = (values, {setSubmitting, resetForm}) => {
+    const handleSubmit = (values) => {
         values.username = currentUser.username;
-        values.content = editorValue;
+        console.log(values)
         // Gửi dữ liệu tới API bằng axios
-        axios.post('http://localhost:3000/posts', values)
-            .then(response => {
-                console.log('Phản hồi API:', response.data);
-                alert('Bài viết đã được đăng thành công!');
-                resetForm(); // Xóa sạch form sau khi đăng thành công
-                navigate("/");
-            })
-            .catch(error => {
-                console.error('Lỗi khi đăng bài:', error);
-                alert('Đã có lỗi xảy ra khi đăng bài.');
-            })
-            .finally(() => {
-                setSubmitting(false); // Dừng trạng thái submitting
-            });
+        axios.put(`http://localhost:3000/posts/${idUpdate}`,values).then(() => {
+            alert("Update Success");
+            navigate("/");
+        })
     };
-    return (
+
+    const getList = () => {
+        axios.get("http://localhost:3000/posts/" + idUpdate).then((res) => {
+            let data = res.data;
+            console.log(data)
+            setListPost(data);
+        })
+    }
+    useEffect(() => {
+        getList()
+    }, []);
+    return(
         <>
             <Header/>
             <div className="mt-5">
-                <h1>Đăng bài viết mới</h1>
+                <h1>Chỉnh sửa bài viết</h1>
                 <Formik
                     initialValues={
-                        {
-                            title: '',
-                            content: '',
-                            status: '',
-                            type: '',
-                        }
+                        listPost
                     }
+                    enableReinitialize={true}
                     onSubmit={handleSubmit}
                 >
-                    {({isSubmitting, setFieldValue}) => (
+                    {({ isSubmitting }) => (
                         <Form>
                             <div className="mb-3">
                                 <BootstrapForm.Label htmlFor="title">Tiêu đề bài viết</BootstrapForm.Label>
@@ -64,7 +63,7 @@ function Posts() {
                                 <BootstrapForm.Label htmlFor="content">Nội dung bài viết</BootstrapForm.Label>
                                 <ReactQuill
                                     theme="snow"
-                                    content={editorValue}
+                                    value={listPost.content}
                                     onChange={setEditorValue}
                                     placeholder="Nhập nội dung bài viết của bạn..."
                                     modules={{
@@ -99,16 +98,15 @@ function Posts() {
                                     <option value={'Tình yêu'}>Tình yêu</option>
                                 </Field>
                             </div>
-                            <button type="submit" className="btn btn-primary">
-                                Đăng bài
+                            <button type="submit" className="btn btn-primary" >
+                                Cập nhật
                             </button>
                         </Form>
                     )}
                 </Formik>
             </div>
         </>
-
     )
 }
 
-export default Posts
+export default Update

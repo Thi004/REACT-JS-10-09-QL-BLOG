@@ -4,12 +4,14 @@ import {useContext} from "react";
 import {MyContext} from "../component/MyContext";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
+import Header from "../component/Header";
 
 function Login() {
     let navigate = useNavigate();
     let {setCurrentUser} = useContext(MyContext);
     return (
         <>
+            <Header/>
             <div className="container">
                 <Formik
                     initialValues={
@@ -21,8 +23,8 @@ function Login() {
                     onSubmit={values => {
                         axios.post("http://localhost:3000/login", values).then((res) => {
                             alert('Đăng nhập thành công');
-                            setCurrentUser(res.data)
-                            navigate("/posts")
+                            setCurrentUser(res.data.data)
+                            navigate("/")
                         }).catch(e => {
                             alert("Sai tài khoản, mật khẩu")
                         })
@@ -36,18 +38,18 @@ function Login() {
                                     <div className="form-header mt-4">
                                         <h2>Login</h2>
                                     </div>
-                                    <form>
+                                    <Form>
                                         <div className="mb-3">
                                             <label htmlFor="loginEmail" className="form-label">User Name</label>
                                             <Field className="form-control" name={'username'}/>
                                         </div>
                                         <div className="mb-3">
                                             <label htmlFor="loginPassword" className="form-label">Password</label>
-                                            <Field className="form-control" name={'password'}/>
+                                            <Field type="password" className="form-control" name={'password'}/>
                                         </div>
                                         <button type="submit" className="btn btn-primary w-100 mb-2">Login</button>
                                         <button className="btn btn-primary w-100"><Link id={'link'} to={'/register'}>Register</Link></button>
-                                    </form>
+                                    </Form>
                                 </div>
                             </div>
                         </div>

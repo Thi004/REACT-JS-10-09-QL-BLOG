@@ -15,8 +15,8 @@ app.listen(3000, () => {
 
 // Đăng ký
 app.post('/register', (req, res) => {
-    const { username, password, dob } = req.body;
-    const result = authLogic.register(username, password, dob);
+    const { username, password, dob, image } = req.body;
+    const result = authLogic.register(username, password, dob,image);
     if (result.success) {
         res.json(result);
     } else {
@@ -34,7 +34,15 @@ app.post('/login', (req, res) => {
         res.status(401).json(result);
     }
 });
-
+app.post('/forgot-password', (req, res) => {
+    const { username } = req.body;
+    const result = authLogic.resetPassword(username);
+    if (result.success) {
+        res.json(result);
+    } else {
+        res.status(404).json(result);
+    }
+});
 // Quản lý bài viết
 app.post('/posts', (req, res) => {
     const { title, content, username, status, type } = req.body;
@@ -44,6 +52,10 @@ app.post('/posts', (req, res) => {
 
 app.get('/posts', (req, res) => {
     res.json(postLogic.getPosts());
+});
+
+app.get('/likes', (req, res) => {
+    res.json(likeLogic.getLikes());
 });
 
 app.get('/posts/:id', (req, res) => {
